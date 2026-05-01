@@ -29,7 +29,7 @@ This project is licensed under the **GNU General Public License v3 (GPLv3)**.
 ### 1. Installation
 Include jQuery and `jquery.scrollEasy.js` in your project:
 ```html
-<script src="[https://code.jquery.com/jquery-3.6.0.min.js](https://code.jquery.com/jquery-3.6.0.min.js)"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="js/jquery.scrollEasy.js"></script>
 ```
 
