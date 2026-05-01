@@ -58,7 +58,7 @@ $(document).ready(function() {
 
 ---
 
-## 🛠 Options
+## Options
 
 | Option | Type | Default | Description |
 | :--- | :--- | :--- | :--- |
