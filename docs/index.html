@@ -1,1 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ScrollEasy - jQuery Plugin Demo</title>
+    
+    <!-- Google Fonts for a modern, clean typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* 
+         * ==========================================
+         * Base Styles & Variables
+         * ========================================== 
+         */
+        :root {
+            --primary: #2c3e50;
+            --accent: #3498db;
+            --text: #333;
+            --bg-light: #f8f9fa;
+        }
 
+        body {
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            color: var(--text);
+            line-height: 1.6;
+            /* Disable native smooth scrolling to test the JS plugin properly */
+            scroll-behavior: auto; 
+        }
+
+        /* 
+         * ==========================================
+         * Fixed Navigation Bar
+         * ========================================== 
+         */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--primary);
+            padding: 15px 0;
+            z-index: 1000;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin: 0 15px;
+            font-weight: 700;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent);
+        }
+
+        /* 
+         * ==========================================
+         * Hero Section (Header)
+         * ========================================== 
+         */
+        .hero {
+            background-color: var(--bg-light);
+            padding: 150px 20px 100px;
+            text-align: center;
+            border-bottom: 1px solid #eaeaea;
+        }
+
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        .btn-github {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 25px;
+            background-color: var(--text);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn-github:hover {
+            background-color: #000;
+        }
+
+        /* 
+         * ==========================================
+         * Content Sections
+         * ========================================== 
+         */
+        .section-block {
+            min-height: 80vh;
+            padding: 80px 20px 20px; /* Top padding acts as a visual buffer for the fixed nav */
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .section-block h2 {
+            color: var(--accent);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 10px;
+            display: inline-block;
+        }
+
+        /* 
+         * ==========================================
+         * Footer
+         * ========================================== 
+         */
+        footer {
+            text-align: center;
+            padding: 40px;
+            background-color: var(--primary);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Main Navigation -->
+    <nav>
+        <a href="#header" class="scroll-link">Home</a>
+        <a href="#features" class="scroll-link">Features</a>
+        <a href="#demo" class="scroll-link">Demo</a>
+        <a href="#license" class="scroll-link">License</a>
+    </nav>
+
+    <!-- Hero Header -->
+    <header id="header" class="hero">
+        <h1>jQuery ScrollEasy</h1>
+        <p>A lightweight and highly customizable plugin for perfect smooth scrolling.</p>
+    </header>
+
+    <!-- Features Section -->
+    <section id="features" class="section-block">
+        <h2>Why choose ScrollEasy?</h2>
+        <p>This plugin transforms default, jumpy HTML anchors into elegant, fluid animations. It is ideal for One-Page websites, landing pages, and technical documentation.</p>
+        <ul>
+            <li>Lightweight and fast execution</li>
+            <li>Smart offset support (perfect for fixed navigation menus like this one)</li>
+            <li>Custom callbacks fired upon animation completion</li>
+        </ul>
+    </section>
+
+    <!-- Demo/Explanation Section -->
+    <section id="demo" class="section-block">
+        <h2>How the Offset works</h2>
+        <p>Have you noticed that when you click the links in the top menu, the section titles are never hidden behind the dark navigation bar? This happens seamlessly thanks to the <code>offset: 60</code> parameter set during plugin initialization.</p>
+        <p>Try scrolling up and down using the menu above to see it in action!</p>
+    </section>
+
+    <!-- License Section -->
+    <section id="license" class="section-block">
+        <h2>Open Source License</h2>
+        <p>This project is proudly released under the <strong>GPL v3</strong> license. You are free to use it in both personal and commercial projects, provided you do not resell the closed source code.</p>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>Crafted with 💙. Released under GPLv3.</p>
+    </footer>
+
+    <!-- 
+      ======================================================
+      SCRIPTS: Libraries, Plugin Core, and Initialization 
+      ====================================================== 
+    -->
+
+    <!-- 1. Load jQuery Library -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- 2. ScrollEasy Plugin Source Code -->
+    <script>
+        /**
+         * jQuery ScrollEasy Plugin
+         * A lightweight, highly customizable plugin for smooth scrolling to anchor targets.
+         * 
+         * @version 1.0.0
+         * @author Your Name <your.email@example.com>
+         * @license GPL-3.0-or-later
+         */
+        (function($) {
+            'use strict'; // Enforces strict mode for better code quality
+
+            $.fn.scrollEasy = function(options) {
+                
+                /**
+                 * Default configuration settings
+                 * @property {number} speed - Scroll animation duration in milliseconds.
+                 * @property {string} easing - Easing method ('swing' or 'linear').
+                 * @property {number} offset - Pixel offset from the top (useful for fixed navigation bars).
+                 * @property {function} complete - Callback function executed upon animation completion.
+                 */
+                var settings = $.extend({
+                    speed: 800,        
+                    easing: 'swing',   
+                    offset: 0,         
+                    complete: null     
+                }, options);
+
+                return this.click(function(event) {
+                    // Retrieve the target element based on the anchor's hash
+                    var target = $(this.hash);
+                    
+                    // Fallback: check if the target exists by 'name' attribute if ID is not found
+                    target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                    
+                    // Proceed only if a valid target element exists in the DOM
+                    if (target.length) {
+                        // Prevent the default abrupt jump to the anchor
+                        event.preventDefault();
+                        
+                        // Execute the smooth scroll animation
+                        $('html, body').animate({
+                            scrollTop: target.offset().top - settings.offset
+                        }, settings.speed, settings.easing, function() {
+                            
+                            // Trigger the callback function if provided and valid
+                            if ($.isFunction(settings.complete)) {
+                                settings.complete.call(this);
+                            }
+                        });
+                    }
+                });
+            };
+        }(jQuery));
+    </script>
+
+    <!-- 3. Plugin Initialization -->
+    <script>
+        $(document).ready(function() {
+            /**
+             * Initialize ScrollEasy on elements with the '.scroll-link' class.
+             * We apply a 60px offset to prevent the fixed header from overlapping the content.
+             */
+            $('.scroll-link').scrollEasy({
+                speed: 1000,
+                offset: 60,
+                easing: 'swing',
+                complete: function() {
+                    // Optional: Log to console to verify the callback works
+                    console.log('Scroll animation successfully completed.');
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
